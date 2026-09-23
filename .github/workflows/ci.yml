@@ -1,16 +1,28 @@
 name: CI
+
 on:
   push:
+    branches: [master]
   pull_request:
+
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22]
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ matrix.node-version }}
           cache: npm
       - run: npm ci
-      - run: npm test
       - run: npm run check
+      - run: npm run test:coverage
+      - run: npm run pack:check
