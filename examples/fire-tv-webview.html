@@ -5,26 +5,53 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Fire TV spatial navigation example</title>
   <style>
-    body { background:#07111f; color:#fff; font:28px system-ui; margin:4vw; }
-    main { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
-    button { min-height:150px; font:inherit; border:4px solid transparent; border-radius:18px; }
-    .tv-focused { border-color:#ff9900; box-shadow:0 0 0 6px #ff990055; transform:scale(1.03); }
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+    body { background:#07111f; color:#fff; margin:4vw; }
+    h1 { font-size:clamp(32px,4vw,60px); margin-bottom:12px; }
+    p { color:#b9c7dc; font-size:22px; }
+    main { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:36px; }
+    button { min-height:140px; color:#07111f; font:700 26px system-ui; border:5px solid transparent; border-radius:18px; }
+    .wide { grid-column:span 2; }
+    .tv-focused { border-color:#ff9900; box-shadow:0 0 0 7px #ff990055; transform:scale(1.03); }
+    #status { margin-top:32px; padding:18px; border-radius:12px; background:#10243c; }
+    kbd { padding:4px 9px; border:1px solid #8394aa; border-radius:5px; }
   </style>
 </head>
 <body>
-  <h1>D-pad navigation without DOM-order surprises</h1>
-  <main>
+  <h1>D-pad navigation follows the screen</h1>
+  <p>Use <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> and <kbd>Enter</kbd>. Escape is the page-owned Back action.</p>
+  <main aria-label="Incident actions">
     <button data-tv-focusable>Incident</button>
     <button data-tv-focusable>Evidence</button>
     <button data-tv-focusable>Target</button>
-    <button data-tv-focusable>Stage</button>
-    <button data-tv-focusable>Confirm</button>
+    <button data-tv-focusable class="wide">Stage rollback</button>
     <button data-tv-focusable>Handoff</button>
   </main>
+  <p id="status" role="status" aria-live="polite">Waiting for focus.</p>
   <script type="module">
     import { installSpatialNavigation } from "../src/index.js";
-    installSpatialNavigation({ bridgeName: "navigateDpad" });
-    // Android/Fire TV WebView bridge: evaluateJavascript("navigateDpad('LEFT')")
+
+    const status = document.querySelector("#status");
+    const navigation = installSpatialNavigation({
+      bridgeName: "navigateDpad",
+      onBack: () => {
+        status.textContent = "Back was handled by the page.";
+        return true;
+      },
+      onFocusChange: ({ label }) => {
+        status.textContent = `Focused: ${label}`;
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (event.target.matches("[data-tv-focusable]")) {
+        status.textContent = `Selected: ${event.target.textContent}`;
+      }
+    });
+
+    // A trusted Android or Fire TV host can call:
+    // webView.evaluateJavascript("window.navigateDpad('LEFT')", null)
+    window.addEventListener("pagehide", () => navigation.destroy(), { once: true });
   </script>
 </body>
 </html>

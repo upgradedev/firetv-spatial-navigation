@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Dependency-free geometric D-pad navigation for Fire TV and television web views.",
   "type": "module",
+  "sideEffects": false,
   "main": "./src/index.js",
+  "module": "./src/index.js",
   "types": "./src/index.d.ts",
   "exports": {
     ".": {
@@ -13,12 +15,16 @@
   },
   "files": [
     "src",
+    "examples",
+    "CONTRIBUTING.md",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "test": "node --test",
-    "check": "node --check src/index.js"
+    "test:coverage": "node --test --experimental-test-coverage",
+    "check": "node --check src/index.js && node --check test/spatial-navigation.test.js",
+    "pack:check": "npm pack --dry-run --json"
   },
   "keywords": [
     "fire-tv",
@@ -32,6 +38,13 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/upgradedev/firetv-spatial-navigation.git"
+  },
+  "homepage": "https://github.com/upgradedev/firetv-spatial-navigation#readme",
+  "bugs": {
+    "url": "https://github.com/upgradedev/firetv-spatial-navigation/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=20"
