@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fire TV spatial navigation example</title>
+  <style>
+    body { background:#07111f; color:#fff; font:28px system-ui; margin:4vw; }
+    main { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    button { min-height:150px; font:inherit; border:4px solid transparent; border-radius:18px; }
+    .tv-focused { border-color:#ff9900; box-shadow:0 0 0 6px #ff990055; transform:scale(1.03); }
+  </style>
+</head>
+<body>
+  <h1>D-pad navigation without DOM-order surprises</h1>
+  <main>
+    <button data-tv-focusable>Incident</button>
+    <button data-tv-focusable>Evidence</button>
+    <button data-tv-focusable>Target</button>
+    <button data-tv-focusable>Stage</button>
+    <button data-tv-focusable>Confirm</button>
+    <button data-tv-focusable>Handoff</button>
+  </main>
+  <script type="module">
+    import { installSpatialNavigation } from "../src/index.js";
+    installSpatialNavigation({ bridgeName: "navigateDpad" });
+    // Android/Fire TV WebView bridge: evaluateJavascript("navigateDpad('LEFT')")
+  </script>
+</body>
+</html>

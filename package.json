@@ -1,0 +1,39 @@
+{
+  "name": "@upgradedev/firetv-spatial-navigation",
+  "version": "0.1.0",
+  "description": "Dependency-free geometric D-pad navigation for Fire TV and television web views.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check src/index.js"
+  },
+  "keywords": [
+    "fire-tv",
+    "d-pad",
+    "spatial-navigation",
+    "ten-foot-ui",
+    "android-tv",
+    "vega-os"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/upgradedev/firetv-spatial-navigation.git"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
